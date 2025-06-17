@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            text-align: center;
+
+        }
+        #countBtn{
+            font-size: 3rem;
+            font-family: arial;
+        }
+        .buttons{
+            padding: 10px;
+            font-size: 1rem;
+            margin: 20px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(45, 82, 232, 0.825);
+            color: white;
+        }
+        .buttons:hover{
+            background-color: rgba(26, 98, 187, 0.825);
+        }
+    </style>
+</head>
+
+<body>
+    <label id="countBtn">0</label>
+    <div class="container">
+        <button id="decrement" class="buttons">Decrement</button>
+        <button id="reset" class="buttons">Reset</button>
+        <button id="increment" class="buttons">Increment</button>
+    </div>
+</body>
+<script>
+    const decrement = document.getElementById("decrement");
+    const reset=document.getElementById("reset");
+    const increment=document.getElementById("increment");
+    const countBtn=document.getElementById("countBtn");
+    let count=0;
+    decrement.onclick=function(){
+        count-=1;
+        countBtn.textContent=count;
+    }
+    reset.onclick=function(){
+        count=0;
+        countBtn.textContent=count;
+    }
+    increment.onclick=function(){
+        count+=1;
+        countBtn.textContent=count;
+    }
+</script>
+
+</html>
