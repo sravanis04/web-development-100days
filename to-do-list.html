@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <style>
+        body{
+            text-align: center;
+            padding: 20px;
+            padding-left: 500px;
+            font-family: sans-serif;
+        }
+        .container{
+            border: 1px solid black;
+            width: 400px;
+            padding-bottom: 30px;
+            background: white;
+            border-radius: 5px;
+        
+        }
+        input{
+            padding: 8px;
+            width: 70px;
+        }
+        button{
+            padding: 8px 12px;
+            margin-left: 5px;
+        }
+        ul{
+            list-style: none;
+            margin: 8px 0;
+            padding: 5px;
+            background: #e2e2e2;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>TO-DO List</h2>
+        <input type="text" id="input-task" placeholder="Enter a task">
+        <button id="task-button">Add Task</button>
+        <ul id="task-list"></ul>
+    </div>
+</body>
+<script>
+    const input=document.getElementById("input-task");
+    const button=document.getElementById("task-button");
+    const list=document.getElementById("task-list");
+
+    const addTask = () => {
+        const task=input.value;
+        if(task!=""){
+            const li=document.createElement("li");
+            li.textContent=task;
+            list.append(li);
+            input.value="";
+        }
+        else{
+            alert("please enter a task");
+        }
+    };
+    button.addEventListener("click",()=>addTask());
+</script>
+</html>
