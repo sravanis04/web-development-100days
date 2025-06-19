@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body{
+            font-family: Arial;
+            text-align: center;
+            padding: 20px;
+        }
+        .question{
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .options button {
+            display: block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+        }
+        .result, .restart-btn{
+            display: none;
+        }
+        #time{
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz App</h1>
+    <p>Time left: <span id="time">30</span> seconds</p>
+    <div class="question"></div>
+    <div class="options"></div>
+    <div class="result">
+        <h3>Your Score:<span id="score"></span>/5</h3>
+    </div>
+    <button class="restart-btn">Restart Quiz</button>
+</body>
+<script>
+    const quizData= [
+        {
+            question:"what is the capital of India?",
+            options:["Kolkata","New Delhi","Mumbai","Dhaka"],
+            answer:"New Delhi"
+        },
+        {
+            question: "Who is the president of India?",
+            options:["Y.S.Jagan","Draupadi Murmu","Narendra Modi","Pratibha Patel"],
+            answer:"Draupadi Murmu"
+        },
+        {
+            question: "What are the neighboring countries of India?",
+            options:["Bangladesh","Japan","Germany","New Zealand"],
+            answer:"Bangladesh"
+        },
+        {
+            question:"What is the largest planet in our solar system?",
+            options:["Earth","Jupiter","Mars","Saturn"],
+            answer:"Jupiter"
+        },
+        {
+            question:"Who was the Father of Computers?",
+            options:["Charles Babbage","Thomas Alva Edison","Nelson Mandela","GreenWich"],
+            answer:"Charles Babbage"
+        }
+    ];
+    let currentQuestion=0;
+    let score=0;
+    let timeLeft=30;
+    let timerInterval;
+
+    const timerEle=document.getElementById('time');
+    const questionEle=document.querySelector(".question");
+    const optionsEle=document.querySelector(".options");
+    const resultEle=document.querySelector(".result");
+    const scoreEle=document.getElementById("score");
+    const restartBtn=document.querySelector(".restart-btn");
+
+    function loadQuestion(){
+        if(currentQuestion>=quizData.length){
+            endQuiz();
+            return;
+        }
+        clearInterval(timerInterval);
+        timeLeft=30;
+        timerEle.textContent=timeLeft;
+        startTimer();
+
+        const currentQuiz=quizData[currentQuestion];
+        questionEle.textContent=currentQuiz.question;
+        optionsEle.innerHTML="";
+
+        const buttons=currentQuiz.options.map(option=> {
+            const btn= document.createElement("button");
+            btn.textContent=option;
+            btn.className="option";
+            btn.onclick=()=> checkAnswer(option);
+            return btn;
+        });
+
+        buttons.forEach(btn=>optionsEle.appendChild(btn));
+    }
+
+    function checkAnswer(selectedOption){
+        if(selectedOption===quizData[currentQuestion].answer){
+            score++;
+        }
+        currentQuestion++;
+        loadQuestion();
+    }
+
+    function startTimer(){
+        timerInterval=setInterval(()=>{
+            timeLeft--;
+            timerEle.textContent=timeLeft;
+            if(timeLeft<=0){
+                clearInterval(timerInterval);
+                currentQuestion++;
+                loadQuestion();
+            }
+        },1000);
+    }
+
+    function endQuiz(){
+        clearInterval(timerInterval);
+        questionEle.style.display="none";
+        optionsEle.style.display="none";
+        resultEle.style.display="block";
+        scoreEle.textContent=score;
+        restartBtn.style.display="block";
+    }
+
+    restartBtn.addEventListener("click", ()=>{
+        currentQuestion=0;
+        score=0;
+        timeLeft=30;
+        timerEle.textContent=timeLeft;
+        questionEle.style.display="block";
+        optionsEle.style.display="block";
+        resultEle.style.display="none";
+        restartBtn.style.display="none";
+    });
+
+    loadQuestion();
+</script>
+</html>
