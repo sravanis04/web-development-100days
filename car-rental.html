@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Rental App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .car-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .car {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .car h3 {
+      margin: 0;
+    }
+
+    button {
+      padding: 8px 15px;
+      border: none;
+      background-color: #1976d2;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚗 Car Rental System</h1>
+    <div id="carList" class="car-list"></div>
+  </div>
+
+  <script>
+    const carFleet = [
+      { id: 1, brand: "Toyota", model: "Innova", year: 2020, isAvailable: true },
+      { id: 2, brand: "Honda", model: "Civic", year: 2018, isAvailable: true },
+      { id: 3, brand: "Tesla", model: "Model 3", year: 2022, isAvailable: true },
+    ];
+
+    function displayCars() {
+      const carListDiv = document.getElementById("carList");
+      carListDiv.innerHTML = "";
+
+      carFleet.forEach(({ id, brand, model, year, isAvailable }) => {
+        const carDiv = document.createElement("div");
+        carDiv.className = "car";
+
+        const title = document.createElement("h3");
+        title.textContent = `${brand} ${model} (${year})`;
+
+        const button = document.createElement("button");
+        button.textContent = isAvailable ? "Rent" : "Return";
+        button.onclick = () => {
+          isAvailable ? rentCar(id) : returnCar(id);
+        };
+
+        carDiv.appendChild(title);
+        carDiv.appendChild(button);
+        carListDiv.appendChild(carDiv);
+      });
+    }
+
+    function rentCar(id) {
+      const car = carFleet.find(({ id: carId }) => carId === id);
+      if (car && car.isAvailable) {
+        const { brand, model } = car;
+        car.isAvailable = false;
+        alert(`You rented ${brand} ${model}`);
+        displayCars();
+      }
+    }
+
+    function returnCar(id) {
+      const car = carFleet.find(({ id: carId }) => carId === id);
+      if (car && !car.isAvailable) {
+        const { brand, model } = car;
+        car.isAvailable = true;
+        alert(`You returned ${brand} ${model}`);
+        displayCars();
+      }
+    }
+
+    displayCars();
+  </script>
+</body>
+</html>
