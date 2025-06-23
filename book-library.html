@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Library App</title>
+    <style>
+        body{
+            font-family: sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container{
+            max-width: 800px;
+            margin: auto;
+        }
+        h1{
+            text-align: center;
+            color: #333;
+        }
+        .controls{
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        input,select{
+            padding: 8px;
+            font-size: 14px;
+        }
+        .book-list{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .book{
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .book h3{
+            margin: 0;
+        }
+        .status{
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Book Library</h1>
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Search by title"/>
+            <select id="authorFilter">
+                <option value="">All Authors</option>
+            </select>
+            <label>
+                <input type="checkbox" id="availableOnly"/>
+                Available Only
+            </label>
+        </div>
+        <div id="bookList" class="book-list"></div>
+    </div>
+</body>
+<script>
+    const books = [
+  { id: 1, title: 'The Alchemist', author: 'Paulo Coelho', available: true },
+  { id: 2, title: 'Atomic Habits', author: 'James Clear', available: false },
+  { id: 3, title: '1984', author: 'George Orwell', available: true },
+  { id: 4, title: 'Animal Farm', author: 'George Orwell', available: false },
+  { id: 5, title: 'The Power of Now', author: 'Eckhart Tolle', available: true }
+];
+
+const bookList=document.getElementById("bookList");
+const searchInput=document.getElementById("searchInput");
+const authorFilter=document.getElementById("authorFilter");
+const availableOnly=document.getElementById("availableOnly");
+
+const authors=[...new Set(books.map(book=>book.author))];
+authors.forEach(author=>{
+    const option=document.createElement('option');
+    option.value=author;
+    option.textContent=author;
+    authorFilter.appendChild(option);
+});
+
+function displayBooks(data){
+    bookList.innerHTML='';
+    if(data.length===0){
+        bookList.innerHTML='<p>No books found.</p>';
+        return;
+    }
+    data.forEach(book=>{
+        const bookDiv=document.createElement('div');
+        bookDiv.className='book';
+        bookDiv.innerHTML=`
+        <h3>${book.author}</h3>
+        <p> Author: ${book.available?'Available':'Not Available'}</p>
+        `;
+        bookList.appendChild(bookDiv);
+    });
+}
+function updateList(){
+    const searchTerm=searchInput.value.toLowerCase();
+    const selectedAuthor=authorFilter.value;
+    const onlyAvailable=availableOnly.checked;
+
+    let filteredBooks=books;
+
+    if(searchTerm){
+        const foundBook=books.find(book=>
+            book.title.toLowerCase().includes(searchTerm)
+        );
+    }
+    if(selectedAuthor){
+        filteredBooks=filteredBooks.filter(book=>book.author===selectedAuthor);
+    }
+    if(onlyAvailable){
+        filteredBooks=filteredBooks.filter(book=> book.available);
+    }
+    displayBooks(filteredBooks);
+}
+searchInput.addEventListener('input',updateList);
+authorFilter.addEventListener('change',updateList);
+availableOnly.addEventListener('change',updateList);
+
+displayBooks(books);
+</script>
+</html>
