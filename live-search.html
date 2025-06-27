@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Live Search App
+    </title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 20px;
+        }
+        input{
+            width: 300px;
+            padding: 10px;
+            font-size: 15px;
+        }
+        .results{
+            margin-top: 20px;
+        }
+        .result-item{
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h2>Live Search</h2>
+    <input type="text" id="searchInput" placeholder="Search names"/>
+    <div class="results" id="results"></div>
+</body>
+<script>
+    const names=["Sravani","Tulasi","Swaroop","James","Alice","Max","Dora","Sofia","Cinderella","Elsa","Anna","Rapenzzel"];
+    const input=document.getElementById("searchInput");
+    const results=document.getElementById("results");
+
+    function displayMatches(searchInput){
+        const filtered=names.filter(name=>
+             name.toLowerCase().includes(searchInput.toLowerCase())
+        );
+        results.innerHTML=filtered.map(name=>
+            `<div class="result-item">${name}</div>`
+        ).join('');
+        if(searchInput.trim()===''){
+            results.innerHTML='';
+        }
+    }
+    function debounce(func, delay){
+        let timeout;
+        return function(...args){
+            clearTimeout(timeout);
+            timeout=setTimeout(()=>func.apply(this,args),delay);
+        };
+    }
+    const debounceSearch=debounce(displayMatches,300);
+    input.addEventListener('input',(e)=>{
+        debounceSearch(e.target.value);
+    });
+</script>
+</html>
