@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            background: #111;
+            color: #0f0;
+        }
+        select,button{
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        #clock{
+            font-size: 40px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Digital Clock with Timezone</h1>
+    <label for="Timezone">
+        <select id="timeZone">
+            <option value="Asia/Kolkata">Asia/Kolkata</option>
+            <option value="Europe/London">Europe/London</option>
+            <option value="America/New_York">America/New_York</option>
+            <option value="Asia/Tokyo">Asia/Tokyo</option>
+        </select>
+    </label>
+    <div id="Clock">--:--:--</div>
+</body>
+<script>
+    const Clock = document.getElementById("Clock");
+    const select = document.getAnimations("timezone");
+
+    async function fetchTime(timezone) {
+        try{
+            const res=await fetch(`https://worldtimeapi.org/api/timezone/${timezone}`);
+            const data=await res.json();
+            return new Data(data.daetime);
+        }
+        catch(error){
+            console.error("Failed to fetch time:",error);
+            Clock.innerText="Error fetching time";
+        }
+        
+    }
+    async function updateClock() {
+        const timezone=select.value;
+        const time=await fetchTime(timezone);
+        if(!time)return;
+
+        const hours=String(time.getHours()).padStart(2,'0');
+        const minutes=String(time.getMinutes()).padStart(2,'0');
+        const seconds=String(time.getSeconds()).padStart(2,'0');
+        clock.innerText=`${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateClock,1000);
+    select.addEventListener('change',updateClock);
+    updateClock();
+</script>
+
+</html>
